@@ -1,0 +1,44 @@
+{include file='common/header' title='商城管理'/}
+
+
+<div class="page-content">
+    <form class="form-horizontal" role="form" action="" data-type="ajax">
+        <input type="hidden" name="id" value="{$data['id']|default=''}" />
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-field-1">未支付订单超时时间</label>
+            <div class="col-sm-5 input-group">
+                <input type="text" class="form-control" id="lastname" value="{$data['overtime']|default=''}" placeholder="请输入未支付订单超时时间" name="overtime" required>
+                <span class="input-group-addon">分</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-field-1">自动收货时间</label>
+            <div class="col-sm-5 input-group">
+                <input type="text" class="form-control" id="lastname" value="{$data['receive']|default=''}" placeholder="请输入自动收货时间" name="receive" required>
+                <span class="input-group-addon">分</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="lastname" class="col-sm-2 control-label">团长佣金比例</label>
+            <div class="col-sm-5 input-group  ">
+                <input type="text" class="form-control" id="lastname" value="{$data['percent']|default=''}" placeholder="请输入比例" name="percent" required>
+                <span class="input-group-addon">%</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">保存</button>
+
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+{include file='common/footer' /}

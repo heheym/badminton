@@ -1,0 +1,133 @@
+
+{foreach name="data" item="v"}
+
+<tr>
+    <td><input type="checkbox" class="i-checks" name="ids[{$v.id}]"></td>
+    <td height="28">{$v.id}</td>
+    <td height="28">{$v.order_sn}</td>
+    <!--<td>{$v.order_sn_submit}</td>-->
+    <td>{$v.consignee}</td>
+    <td>{$v.mobile}</td>
+    <td align="left">{$v.amount}</td>
+    <td>{$v.submit_time}</td>
+    <td>{$v.d_name}</td>
+    <td>{$v.cid}</td>
+    <td>{$v.c_name}</td>
+    <td>{$v.order_status}</td>
+    <td cols="5">{:mb_substr($v.note,0,10,utf8)}</td>
+    <td style="padding:5px 0">
+        <a class="btn btn-xs"
+           href="{:url('admin/order/add',array('id'=>$v['id']))}"
+           title="修改">
+             编辑</a>
+        {if($v->getData('order_status')==2)}
+        <a class="btn btn-xs btn-primary update" onclick="deliver(this)" data-toggle="modal" data-target="#deliver" data-id="{$v.id}">发货</a>
+        {elseif($v->getData('order_status')==5)}
+        <a class="btn btn-xs btn-success" name="post"
+           href="{:url('admin/order/refund',array('id'=>$v['id']))}"
+           title="修改">
+            同意退款</a>
+        <a class="btn btn-xs btn-danger" name="post"
+           href="{:url('admin/order/reject',array('id'=>$v['id']))}"
+           title="修改">
+            拒绝退款</a>
+        {/if}
+    </td>
+</tr>
+{/foreach}
+
+<tr>
+    <!--<td align="left" class="hidden-xs center"><button  class="btn btn-white btn-yellow btn-sm hidden-xs" type="submit">全删</button> </td>-->
+    <td align="left" class="hidden-xs center"><a  class="btn btn-white btn-yellow btn-sm hidden-xs"  data-toggle="modal" data-target="#batch_deliver">批量发货</a> </td>
+
+    <td align="left" colspan="10"></td>
+</tr>
+<tr>
+    <td align="left" colspan="3"></td>
+    <td align="left">本页订单总额：</td>
+    <td  class="bg-success" >{$amount}</td>
+    <td></td>
+    <td align="left">订单总额：</td>
+    <td class="bg-success">{$sum}</td>
+</tr>
+<tr>
+    <td height="50" colspan="12" align="left">{$page}</td>
+</tr>
+
+<div class="modal fade" id="batch_deliver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog ">
+        <div class="modal-content col-md-9 col-md-offset-3">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">发货</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label  style="font-size:15px">司机列表</label>
+                    <select  name="batchdriver" class="form-control" id="batchdriver">
+                        {foreach $driver as $v}
+                        <option value="{$v.id}">{$v.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button  class="btn btn-success" href="javascript:;" onclick="batchdeliver()" >保存</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script>
+    $("a[name='post']").click(function(){
+        //获取数据
+        var url = $(this).attr('href');
+        //弹出询问框
+        layer.confirm('您确定要提交吗?',{icon:3, title:'提示'},function(index){
+            //异步提交
+            $.ajax({
+                type: "POST",
+                dataType:"json",
+                url:url,
+                data:null,
+                success:function(obj){
+                    var icon_num = (obj.status==200) ? 1 : 2;
+                    if(obj.status==200 || obj.status==202){
+                        layer.open({
+                            content: obj.msg,
+                            btn: ['确定'],
+                            shade: 0.1,
+                            icon: icon_num,
+                            yes: function(index, layero){
+                                if(obj.url){
+                                    location.href = obj.url; //跳转指定地址
+                                }else{
+                                    layer.close(index);
+                                }
+                            },
+                            cancel: function(){
+                                location.href = obj.url; //跳转指定地址
+                            },
+                        });
+                    }
+                },
+                error:function(data){
+                    layer.alert('网络故障!');
+                }
+            });
+        });
+
+        return false;
+    });
+    //ajax分页
+    function ajax_page(page) {
+        $.ajax({
+            type:"POST",
+            data:$('#list-filter').serialize()+'&page='+page,
+            success: function(data,status){
+                $("#ajax-data").html(data);
+            }
+        });
+    }
+</script>

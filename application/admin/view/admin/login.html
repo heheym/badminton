@@ -1,0 +1,93 @@
+{include file="common/header" title="登录"/}
+
+
+<body class="login-layout blur-login">
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="login-container">
+                    <div class="center">
+                        <h1>
+                            <i class="ace-icon fa fa-leaf green"></i>
+                            <span class="red"></span>
+                            <span  class="blue" style="font-family:microsoft yahei" id="id-text2">网站后台管理</span>
+                        </h1>
+                    </div>
+
+                    <div class="space-6"></div>
+
+                    <div class="position-relative">
+                        <div id="login-box" class="login-box visible widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger text-center">
+                                        <i class="ace-icon fa fa-coffee green"></i>
+                                        后台登录
+                                    </h4>
+
+                                    <div class="space-6"></div>
+                                    <form class="ajaxForm3" name="runlogin" id="runlogin" method="post" action="{:url('admin/Admin/login')}" data-type="ajax1">
+                                        <fieldset>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" value="{$cookie['name']|default=''}" name="name" id="admin_username" placeholder="用户名" required/>
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" value="{$cookie['password']|default=''}" class="form-control" name="password" id="admin_pwd" placeholder="输入密码" required/>
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+                                            </label>
+                                            {if condition="config('geetest.geetest_on')"}
+                                            <div id="captcha"></div>
+                                            <div class="space-6"></div>
+                                            {else /}
+                                            <label class="block clearfix">
+												<span class="block input-icon input-icon-right">
+													<input type="text" class="form-control" name="vcode" id="verify" placeholder="输入验证码" required/>
+													<i class="ace-icon fa fa-sort-alpha-asc"></i>
+												</span>
+                                            </label>
+                                            <label class="block clearfix">
+												<span class="block text-center">
+
+													<img class="verify_img" id="verify_img" src="{:captcha_src()}" onClick="this.src=this.src"+Math.random() style="cursor: pointer;width:100%;border: 1px solid #d5d5d5;" title="点击获取">
+												</span>
+                                            </label>
+                                            {/if}
+
+                                            <div class="clearfix">
+                                                <label class="inline">
+                                                    <input name="rememberme" type="checkbox" {$cookie['name']?'checked':''} class="ace" value="1" />
+                                                    <span class="lbl"> 记住信息</span>
+                                                </label>
+
+                                                <button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+                                                    <i class="ace-icon fa fa-key"></i>
+                                                    <span class="bigger-110">登录</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="space-4"></div>
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.login-box -->
+                    </div><!-- /.position-relative -->
+
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+
+<!-- 基本的js -->
+<!--[if !IE]> -->
+
+<script src="__ADMIN__/js/yfcmf.js"></script>
+{include file="common/footer"}

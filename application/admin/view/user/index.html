@@ -1,0 +1,81 @@
+{include file="common/header" /}
+
+<div class="page-content">
+    <div class="row maintop" style="margin:10px ">
+        <!--<div class="col-xs-4 col-sm-2 margintop5">-->
+            <!--<a href="{:url('admin/Admin/admin_add')}">-->
+                <!--<button class="btn btn-sm btn-danger">-->
+                    <!--<i class="ace-icon fa fa-bolt bigger-110"></i>-->
+                    <!--添加管理员-->
+                <!--</button>-->
+            <!--</a>-->
+        <!--</div>-->
+        <div class="col-xs-10 col-sm-5 margintop5">
+            <form name="admin_list_sea" class="form-search" method="post" action="{:url('admin/user/index')}">
+                <div class="input-group">
+										<span class="input-group-addon">
+											<i class="ace-icon fa fa-check"></i>
+										</span>
+                    <input type="text" name="search_name" class="form-control" value="{$search_name}"
+                           placeholder="输入需查询的用户名"/>
+                    <span class="input-group-btn">
+											<button type="submit" class="btn btn-purple btn-sm">
+												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+												搜索
+											</button>
+										</span>
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-4 col-sm-5 margintop5">
+            <div class="input-group-btn">
+                <a href="{:url('admin/user/index')}">
+                    <button type="button" class="btn btn-sm  btn-purple">
+                        <span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+                        显示全部
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:10px">
+        <div class="col-xs-12">
+            <div>
+                <form id="leftnav" name="leftnav" method="post" action="">
+                    <input type="hidden" name="checkk" id="checkk" value="1"/><!--用于判断操作类型-->
+                    <table class="table table-striped table-bordered table-hover" id="dynamic-table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>昵称</th>
+                            <th class="hidden-sm hidden-xs">头像</th>
+                            <th>消费累计</th>
+                            <th>注册时间</th>
+                            <!--<th style="border-right:#CCC solid 1px;">操作</th>-->
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {foreach($data as $k=>$v)}
+                        <tr>
+                            <td height="28">{$v.id}</td>
+                            <td>{$v.nickname}</td>
+                            <td>{if($v.head)}<img src="{$v.head}" width="60" height="60" >{/if}</td>
+                            <td>{$v.total_amount}</td>
+                            <td>{$v.reg_time}</td>
+                        </tr>
+                        {/foreach}
+                        <tr>
+                            <td height="50" colspan="10" align="left">{$page}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /.page-content -->
+
+{include file="common/footer" /}

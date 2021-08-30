@@ -1,0 +1,160 @@
+{include file="common/header" title=""/}
+
+<style>
+    .order-item {
+        border: 1px solid transparent;
+        margin-bottom: 1rem;
+    }
+    .order-item:hover {
+        border: 1px solid #3c8ee5;
+    }
+    .goods-pic {
+        width: 5.5rem;
+        height: 5.5rem;
+        display: inline-block;
+        background-color: #ddd;
+        background-size: cover;
+        background-position: center;
+        margin-right: 1rem;
+    }
+    .order-tab-1 {
+        width: 40%;
+    }
+    .order-tab-2 {
+        width: 20%;
+        text-align: center;
+    }
+    .order-tab-3,.order-tab-4,.order-tab-5 {
+        width: 10%;
+        text-align: center;
+    }
+
+</style>
+
+
+<div class="wrapper wrapper-content animated fadeIn">
+
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li><a href="{:url('order/index')}"><i class="fa fa-mail-reply text-navy"></i>返回订单列表</a></li>
+            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">订单信息</a></li>
+        </ul>
+
+        <div class="page-content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <form class="form-horizontal adminform" name="admin_list_add" method="post" data-type="ajax" action="{:url('admin/order/add')}">
+                        <input type="hidden" name="id" value="{:input('id')}" />
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div>
+                                    <!--<form id="leftnav" name="leftnav" method="post" action="">-->
+                                        <table class="table  bg-white ">
+                                            <tbody><tr>
+                                                <th class="order-tab-1"><span><input type="checkbox" class="goods-all"></span>&nbsp;&nbsp;全选&nbsp;&nbsp;商品信息</th>
+                                                <th class="order-tab-2">金额</th>
+                                                <th class="order-tab-3">实际付款</th>
+                                                <th class="order-tab-4">订单状态</th>
+                                                <!--<th class="order-tab-5">操作</th>-->
+                                            </tr>
+                                            </tbody></table>
+
+                                  <div class="order-item">
+                                        <table class="table  bg-white">
+                                            <tbody>
+
+                                            <tr>
+                                                <td colspan="5">
+											<span>
+						   <input data-num="4188" type="checkbox" class="goods-one" value="4188">
+					   </span>
+                                                    <span class="mr-5">{$orders.submit_time}</span>
+                                                    <span class="mr-5">订单号：{$orders.order_sn_submit}</span>
+                                                    <span>用户：{$orders.nickname}</span>
+                                                </td>
+                                            </tr>
+                                            {foreach $goods as $k=>$v}
+                                            <tr>
+
+                                                <td class="order-tab-1">
+                                                    <div class="goods-item" flex="dir:left box:first">
+                                                        <div class="fs-0" style="float:left">
+                                                            <div class="goods-pic" style="background-image: url(/uploads/{$v.img})"></div>
+                                                        </div>
+                                                        <div class="goods-info">
+                                                            <div class="goods-name">{$v.name}</div>
+
+                                                            <div class="fs-sm">数量：
+                                                                <span class="text-danger">{$v.num}件</span>
+                                                            </div>
+                                                            <div class="fs-sm">小计：
+                                                                <span class="text-danger">{$v.price}元</span></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {if condition="$k==0"}
+                                                <td class="order-tab-2">
+                                                    <div>总金额：{$orders.amount}元</div>
+                                                    <!--<div>优惠券优惠：0.00元</div>-->
+                                                </td>
+                                                <td class="order-tab-3">
+                                                    <div>{$orders.amount}</div>
+                                                </td>
+                                                <td class="order-tab-4">
+                                                    <div>
+                                                        {if($orders.order_status==0)}
+                                                        <span class="badge badge-default">待付款</span>
+                                                        {elseif($orders.order_status==1)/}
+                                                        <span class="badge badge-success">已完成</span>
+                                                        {elseif($orders.order_status==2)/}
+                                                        <span class="badge badge-warning">待发货</span>
+                                                        {elseif($orders.order_status==3)/}
+                                                        <span class="badge badge-info">待收货</span>
+                                                        {elseif($orders.order_status==4)/}
+                                                        <span class="badge badge-primary">已取消</span>
+                                                        {elseif($orders.order_status==5)/}
+                                                        <span class="badge badge-danger">待退款</span>
+                                                        {elseif($orders.order_status==6)/}
+                                                        <span class="badge badge-primary">已退款</span>
+                                                        {/if}
+                                                    </div>
+                                                </td>
+
+                                                {/if}
+                                            </tr>
+                                            {/foreach}
+                                            <tr>
+                                                <td colspan="5">
+                                                    <div>
+                                                        <span class="mr-3">收货人：{$orders.consignee}</span>
+                                                        <span class="mr-3">电话：{$orders.mobile}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="mr-3">社区名称：{$orders.c_name}</span>
+                                                        <span class="mr-3">社区地址：{$orders.c_address}</span>
+                                                        <span class="mr-3">社区电话：{$orders.c_phone}</span>
+                                                    </div>
+                                                        <div><span style="vertical-align: top">备注：</span ><textarea name="note" rows="5" cols="50" >{$orders.note}</textarea></div>
+                                                    <div><span style="vertical-align: top">用户备注：</span ><textarea name="note" rows="5" cols="50" >{$orders.usernote}</textarea></div>
+                                                        <input class="btn btn-primary" style="margin-left:50px" type="submit" value="提交"/>
+                                                </td>
+                                            </tr>
+
+                                            </tbody></table>
+                               </div>
+
+                                    <!--</form>-->
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{include file="common/footer" /}

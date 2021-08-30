@@ -1,0 +1,87 @@
+
+{foreach name="data" item="v"}
+
+<tr>
+    <td><input type="checkbox" class="i-checks" name="ids[{$v.id}]"></td>
+    <td>{$v.id}</td>
+    <td style="margin:0;padding:0"><img src="{$v.head}" width=50 height=50 />{$v.cid['nickname']}</td>
+    <td style="text-align:left">姓名:{$v.realname} <br/>
+        微信号:{$v.wxacount}</td>
+    <td>{$v.amount}</td>
+    <td>{$v.rstatus}</td>
+    <td>{$v.rtime}</td>
+    <td style="padding:5px 5px;text-align:left">
+        {if($v->getData('rstatus')==0)}
+        <a class="btn btn-xs btn-success" name="post"
+           href="{:url('admin/reward/examine',array('id'=>$v['id'],'action'=>1))}"
+           >
+            同意</a>
+        <a class="btn btn-xs btn-danger" name="post"
+           href="{:url('admin/reward/examine',array('id'=>$v['id'],'action'=>2))}"
+           title="修改">
+            拒绝</a>
+        {elseif($v->getData('rstatus')==1)}
+        <a class="btn btn-xs btn-primary" style="margin-bottom:5px" name="post"
+           href="{:url('admin/reward/reward',array('id'=>$v['id'],'action'=>1))}"
+           >
+             确认打款</a>（微信支付自动打款）<br />
+        <a class="btn btn-xs btn-primary" name="post"
+           href="{:url('admin/reward/reward',array('id'=>$v['id'],'action'=>2))}"
+        >
+            手动打款</a>（线下打款）<br />
+        {/if}
+
+    </td>
+</tr>
+{/foreach}
+
+<tr>
+    <td align="left" class="hidden-xs center"><button  class="btn btn-white btn-yellow btn-sm hidden-xs" type="submit">全删</button> </td>
+
+    <td height="50" colspan="" align="left">{$page}</td>
+    <td align="left" colspan="9"></td>
+</tr>
+
+<script type="text/javascript">
+    $("a[name='post']").click(function(){
+        //获取数据
+        var url = $(this).attr('href');
+        //弹出询问框
+        layer.confirm('您确定要提交吗?',{icon:3, title:'提示'},function(index){
+            //异步提交
+            $.ajax({
+                type: "POST",
+                dataType:"json",
+                url:url,
+                data:null,
+                success:function(obj){
+                    var icon_num = (obj.status==200) ? 1 : 2;
+                    if(obj.status==200 || obj.status==202){
+                        layer.open({
+                            content: obj.msg,
+                            btn: ['确定'],
+                            shade: 0.1,
+                            icon: icon_num,
+                            yes: function(index, layero){
+                                if(obj.url){
+                                    location.href = obj.url; //跳转指定地址
+                                }else{
+                                    layer.close(index);
+                                }
+                            },
+                            cancel: function(){
+                                location.href = obj.url; //跳转指定地址
+                            },
+                        });
+                    }
+                },
+                error:function(data){
+                    layer.alert('网络故障!');
+                }
+            });
+        });
+
+        return false;
+    });
+
+</script>

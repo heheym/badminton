@@ -1,0 +1,119 @@
+{include file="common/header" /}
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <!--<div class="row">-->
+        <!--<div class="col-sm-12">-->
+        <div class="tabs-container">
+             <ul class="nav nav-tabs">
+                    <li><a href="{:url('admin/admin_list')}"><i class="fa fa-mail-reply text-navy"></i>返回管理员列表</a></li>
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">{$data['id']?'编辑管理员':'添加管理员'}</a></li>
+                </ul>
+
+        <div class="page-content">
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal adminform" name="admin_list_add" method="post" data-type="ajax" action="{:url('admin/Admin/admin_add')}">
+            <input type="hidden" name="id" value="{$data['id']|default=''}" />
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属用户组： </label>
+                <div class="col-sm-10">
+                    <select name="role_id"  class="col-sm-5" required>
+                        <option value="">请选择所属用户组</option>
+                        {foreach name="role" item="v"}
+                        <option value="{$v.id}" {$v.id==$data.role_id?'selected':''} >{$v.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登录用户名：  </label>
+                <div class="col-sm-10">
+                    <input type="text" name="name" value="{$data.name|default=''}" id="admin_username" placeholder="输入登录用户名" class="col-xs-10 col-sm-5" required/>
+                    <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用户名必须是以字母开头，数字、符号组合</span>
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            {if(isset($data['id']))}
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登录密码：  </label>
+                <div class="col-sm-10">
+                    <input type="text" name="password" id="admin_pwd" maxlength="15" minlength="6" placeholder="输入登录密码,为空不更改" class="col-xs-10 col-sm-5" />
+                    <span class="lbl col-xs-12 col-sm-7"><span class="red"></span>密码必须大于6位，小于15位</span>
+                </div>
+            </div>
+            {else /}
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登录密码：  </label>
+                <div class="col-sm-10">
+                    <input type="text" name="password" id="admin_pwd" maxlength="15" minlength="6" placeholder="输入登录密码" class="col-xs-10 col-sm-5" required/>
+                    <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>密码必须大于6位，小于15位</span>
+                </div>
+            </div>
+            {/if}
+            <div class="space-4"></div>
+
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户邮箱：  </label>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="email" name="admin_email" id="admin_email" placeholder="输入用户邮箱" class="col-xs-10 col-sm-5" required/>-->
+                    <!--<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于密码找回，请认真填写</span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="space-4"></div>
+
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机号码：  </label>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="number" name="admin_tel" id="admin_tel" placeholder="输入手机号码" class="col-xs-10 col-sm-5" required/>-->
+                    <!--<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>只能填写数字</span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="space-4"></div>-->
+
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 通用网名：  </label>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" name="admin_realname" id="admin_realname" placeholder="输入通用网名" class="col-xs-10 col-sm-5" required/>-->
+                    <!--<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于发布信息所有人，且在前端显示</span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+                <div class="col-sm-10" style="padding-top:5px;">
+                    <input name="admin_open" id="admin_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+                    <span class="lbl">&nbsp;默认关闭</span>
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        保存
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn" type="reset">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div><!-- /.page-content -->
+        </div>
+<!--</div>-->
+    <!--</div>-->
+</div>
+{include file="common/footer" /}

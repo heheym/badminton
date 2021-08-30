@@ -1,0 +1,69 @@
+
+{foreach($data as $k=>$v)}
+<tr>
+    <td>{$v.id}</td>
+    <td height="28">{$v.cid}</td>
+    <td>{$v.balance}</td>
+    <td>{$v.leave}</td>
+    <td>{$v.create_time}</td>
+    <td>{$v.detail}</td>
+</tr>
+{/foreach}
+<tr>
+    <td height="50" colspan="10" align="left">{$page}</td>
+</tr>
+
+
+
+<script>
+    $("a[name='post']").click(function(){
+        //获取数据
+        var url = $(this).attr('href');
+        //弹出询问框
+        layer.confirm('您确定要提交吗?',{icon:3, title:'提示'},function(index){
+            //异步提交
+            $.ajax({
+                type: "POST",
+                dataType:"json",
+                url:url,
+                data:null,
+                success:function(obj){
+                    var icon_num = (obj.status==200) ? 1 : 2;
+                    if(obj.status==200 || obj.status==202){
+                        layer.open({
+                            content: obj.msg,
+                            btn: ['确定'],
+                            shade: 0.1,
+                            icon: icon_num,
+                            yes: function(index, layero){
+                                if(obj.url){
+                                    location.href = obj.url; //跳转指定地址
+                                }else{
+                                    layer.close(index);
+                                }
+                            },
+                            cancel: function(){
+                                location.href = obj.url; //跳转指定地址
+                            },
+                        });
+                    }
+                },
+                error:function(data){
+                    layer.alert('网络故障!');
+                }
+            });
+        });
+
+        return false;
+    });
+    //ajax分页
+    function ajax_page(page) {
+        $.ajax({
+            type:"POST",
+            data:$('#list-filter').serialize()+'&page='+page,
+            success: function(data,status){
+                $("#ajax-data").html(data);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,69 @@
+{include file="common/header"}
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <!--<div class="row">-->
+    <!--<div class="col-sm-12">-->
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li><a href="{:url('driver/index')}"><i class="fa fa-mail-reply text-navy"></i>返回司机列表</a></li>
+            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">{$data.id?'编辑司机':'添加司机'}</a></li>
+        </ul>
+
+
+        <div class="page-content">
+    <!--主题-->
+    <!--<div class="page-header">-->
+        <!--<h1>-->
+            <!--您当前操作-->
+            <!--<small>-->
+                <!--<i class="ace-icon fa fa-angle-double-right"></i>-->
+                <!--添加用户组-->
+            <!--</small>-->
+        <!--</h1>-->
+    <!--</div>-->
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal ajaxForm2" name="admin_group_add" data-type="ajax" method="post" action="{:url('admin/driver/add')}">
+                <input type="hidden" name="id" id="id" value="{$data.id|default=''}" />
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 姓名：  </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="name" value="{$data.name|default=''}" id="title" placeholder="输入姓名" class="col-xs-10 col-sm-4" required/>
+                    </div>
+                </div>
+
+                <div class="space-4"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 电话：  </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="telephone" value="{$data.telephone|default=''}" id="title" placeholder="输入电话" class="col-xs-10 col-sm-4" required/>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn btn-info" type="submit">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            保存
+                        </button>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <button class="btn" type="reset">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div><!-- /.page-content -->
+    </div>
+ </div>
+{include file="common/footer"}

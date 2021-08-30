@@ -1,0 +1,289 @@
+{include file="common/header" title="添加社区" /}
+
+<style type="text/css">
+    /*#map*/
+    #allmap {
+        /*margin-left:188px;*/
+        height: 500px;
+        width: 1000px;
+        overflow: hidden;
+    }
+
+    #r-result {
+        width: 100%;
+        font-size: 14px;
+        /*margin-left:190px;*/
+        margin-bottom: 20px;
+    }
+    #map,#user,#community {
+        margin-left:190px;
+    }
+
+    .selected{
+        border:3px solid orangered;
+    }
+</style>
+
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <!--<div class="row">-->
+    <!--<div class="col-sm-12">-->
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li><a href="{:url('community/index')}"><i class="fa fa-mail-reply text-navy"></i>返回社区列表</a></li>
+            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">{$data['id']?'编辑社区':'添加社区'}</a></li>
+        </ul>
+
+        <div class="page-content">
+            <!--主题-->
+            <!--<div class="page-header">-->
+            <!--<h1>-->
+            <!--您当前操作-->
+            <!--<small>-->
+            <!--<i class="ace-icon fa fa-angle-double-right"></i>-->
+            <!--添加系统管理员-->
+            <!--</small>-->
+            <!--</h1>-->
+            <!--</div>-->
+            <div class="row">
+                <div class="col-xs-12">
+                    <form class="form-horizontal adminform" name="admin_list_add" method="post" data-type="ajax" action="{:url('admin/community/add')}">
+                        <input type="hidden" name="c_id" value="{$data['c_id']|default=''}" />
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 社区名：  </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="c_name" value="{$data.c_name|default=''}" id="admin_username" placeholder="输社区名" class="col-xs-10 col-sm-5" required/>
+                                <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span></span>
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 社区收货地址：  </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="c_address" value="{$data.c_address|default=''}" id="admin_username" placeholder="输入地址" class="col-xs-10 col-sm-5" required/>
+                                <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span></span>
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 团长名：  </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="communiter" value="{$data.communiter|default=''}" id="admin_username" placeholder="输入团长名" class="col-xs-10 col-sm-5" required/>
+                                <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span></span>
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 团长电话：  </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="c_phone" value="{$data.c_phone|default=''}" id="admin_username" placeholder="输入团长电话" class="col-xs-10 col-sm-5" required/>
+                                <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span></span>
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <!--团长搜索-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 添加/编辑团长：  </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="" value="{$data['nickname']|default=''}" id="search" placeholder="搜索团长" class="col-sm-2" />
+                                <input type="button" value="搜索"  onclick="search_user()" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group" id="user" style="">
+                                {if(!empty($data.uid))}
+                                    <div class="col-sm-1 " style="margin: 10px;" >
+                                        <div class="thumbnail" style="width:100px;height:100px;">
+                                            <img src="{$data['head']}"  onclick="change(this)" uid="{$data['uid']}" class="selected">
+                                            <div class="caption">
+                                                <p>{$data['nickname']}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>
+                            <input type="hidden" name="uid" value="{$data['uid']|default=''}" required/>
+                        </div>
+
+                        <!-- 地图盒子 -->
+                        <div id="map" class="form-group">
+                            <!-- 搜索显示框 -->
+                            <div id="r-result" class="col-sm-10">
+                                地址: <input id="cityName" type="text" style="width:350px; margin-right:10px;" />
+                                <input type="button" value="搜索" onclick="theLocation()" /> 经度:
+                                <input type="text" id="lng"  name="lng" required  value="{$data['lng']|default=''}"/> 纬度：
+                                <input type="text" id="lat" name="lat" required value="{$data['lat']|default=''}"/>
+                            </div>
+                            <div id="allmap"></div>
+                        </div>
+
+                        <!--推荐人-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 添加/编辑推荐人：  </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="" value="{$data2.communiter|default=''}" id="referee" placeholder="输入推荐人" class="col-sm-2" />
+                                <input type="button" value="搜索"  onclick="search_referee()" />
+                                <!--<span class="lbl col-xs-12 col-sm-7"><span class="red">*</span></span>-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group" id="community" style="">
+                                {if($data2)}
+                                    <div class="col-sm-1 " style="margin: 10px;" >
+                                        <div class="thumbnail" style="width:100px;height:100px;">
+                                            <img src="{$data2['head']}"  onclick="chang(this)" uid="{$data2['c_id']}" class="selected">
+                                            <div class="caption">
+                                                <p>{$data2['communiter']}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>
+                            <input type="hidden" name="referee" value="{$data2['c_id']|default=''}" />
+                        </div>
+
+
+                        <div class="clearfix form-actions" >
+                            <div class="col-md-offset-3 col-md-9" style="margin-top:20px">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="ace-icon fa fa-check bigger-110"></i>
+                                    保存
+                                </button>
+
+                                &nbsp; &nbsp; &nbsp;
+                                <button class="btn" type="reset">
+                                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div><!-- /.page-content -->
+    </div>
+    <!--</div>-->
+    <!--</div>-->
+</div>
+
+
+
+
+<!-- js文件 -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.3&services=true"></script>
+<!-- 页面地图js方法 -->
+<script type="text/javascript">
+    // 在指定容器创建地图实例并设置最大最小缩放级别
+    var map = new BMap.Map("allmap", {
+        minZoom: 5,
+        maxZoom: 19
+    });
+
+    // 初始化地图，设置中心点和显示级别
+    map.centerAndZoom(new BMap.Point(121.36564, 31.22611), 19);
+
+    // 开启鼠标滚轮缩放功能，仅对PC上有效
+    map.enableScrollWheelZoom(true);
+
+    // 将控件（平移缩放控件）添加到地图上
+    map.addControl(new BMap.NavigationControl());
+
+    // 为地图增加点击事件，为input赋值
+    map.addEventListener("click", function(e) {
+        document.getElementById('lat').value = e.point.lat;
+        document.getElementById('lng').value = e.point.lng;
+
+    });
+
+    // 创建位置检索、周边检索和范围检索
+    var local = new BMap.LocalSearch(map, {
+        renderOptions: {
+            map: map
+        }
+    });
+
+    // 发起检索
+    function theLocation() {
+        var city = document.getElementById("cityName").value;
+        if (city != "") {
+            local.search(city);
+        }
+    };
+
+    // 弹出经纬度
+    function submit() {
+        var lat = document.getElementById('lat');
+        var lng = document.getElementById('lng');
+        alert("经度：" + lng.value + "\n" + "纬度：" + lat.value);
+    };
+</script>
+
+
+<script type="text/javascript">
+    function search_user()
+    {
+        var search = $('#search').val();
+        if(search.length==0){
+            return;
+        }
+        $.post("{:url('admin/community/search_user')}",{search:search},function (data) {
+            if(data=='没有数据'){
+                $('#user').html('');
+                return;
+            }
+            $('#user').html();
+            $('#user').html(data);
+        },'html');
+    }
+
+    function search_referee()
+    {
+        var referee = $('#referee').val();
+        if(referee.length==0){
+            return;
+        }
+        $.post("{:url('admin/community/search_referee')}",{referee:referee},function (data) {
+            if(data=='没有数据'){
+                $('#community').html('');
+                return;
+            }
+            $('#community').html();
+            $('#community').html(data);
+        },'html');
+    }
+
+    function change(o)
+    {
+        if($(o).hasClass('selected')){
+            $(o).removeClass('selected');
+            $('input[name="uid"]').val('');
+            return;
+        }
+        $('#user img').removeClass('selected');
+         $(o).addClass('selected');
+        $('input[name="uid"]').val($(o).attr('uid'));
+    }
+
+    function chang(o)
+    {
+        if($(o).hasClass('selected')){
+            $(o).removeClass('selected');
+            $('input[name="referee"]').val('');
+            return;
+        }
+        $('#community img').removeClass('selected');
+        $(o).addClass('selected');
+        $('input[name="referee"]').val($(o).attr('uid'));
+    }
+
+</script>
+
+{include file="common/footer" /}
